@@ -351,18 +351,7 @@ class AppSettings:
 
     @classmethod
     def _exit_handler(cls):
-        cls._log.info('Initiating shutdown procedures...')
-
-        # Stop worker threads
-        QueueWorker.exit()
-
-        # Save necessary database tables
-        Database.save_database_tables()
-
-        # Close MongoDB connection
-        Database.close_connection()
-
-        cls._log.info('Now exiting Manga Tagger')
+        pass
 
     @classmethod
     def _create_settings(cls):

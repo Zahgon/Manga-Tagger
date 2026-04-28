@@ -32,49 +32,11 @@ CURRENTLY_PENDING_RENAME = set()
 
 
 def main():
-    AppSettings.load()
-
-    LOG.info(f'Starting Manga Tagger - Version {__version__}')
-    LOG.debug('RUNNING WITH DEBUG LOG')
-
-    if AppSettings.mode_settings is not None:
-        LOG.info('DRY RUN MODE ENABLED')
-        LOG.info(f"MetadataTable Insertion: {AppSettings.mode_settings['database_insert']}")
-        LOG.info(f"Renaming Files: {AppSettings.mode_settings['rename_file']}")
-        LOG.info(f"Writing Comicinfo.xml: {AppSettings.mode_settings['write_comicinfo']}")
-
-    QueueWorker.run()
+    pass
 
 
 def process_manga_chapter(file_path: Path, event_id):
-    filename = file_path.name
-    directory_path = file_path.parent
-    directory_name = file_path.parent.name
-
-    logging_info = {
-        'event_id': event_id,
-        'manga_title': directory_name,
-        "original_filename": filename
-    }
-
-    LOG.info(f'Now processing "{file_path}"...', extra=logging_info)
-
-    LOG.debug(f'filename: {filename}')
-    LOG.debug(f'directory_path: {directory_path}')
-    LOG.debug(f'directory_name: {directory_name}')
-
-    manga_details = filename_parser(filename, logging_info)
-
-    metadata_tagger(file_path, manga_details[0], manga_details[1], manga_details[2], logging_info, manga_details[3])
-
-    # Remove manga directory if empty
-    try:
-        LOG.info(f'Deleting {directory_path}...')
-        if directory_path != AppSettings.download_dir:
-            LOG.info(f'Deleting {directory_path}...')
-            directory_path.rmdir()
-    except OSError as e:
-        LOG.info("Error: %s : %s" % (directory_path, e.strerror))
+    pass
 
 
 def filename_parser(filename, logging_info):

@@ -65,12 +65,11 @@ class Database:
 
     @classmethod
     def save_database_tables(cls):
-        ProcSeriesTable.save()
+        pass
 
     @classmethod
     def close_connection(cls):
-        cls._log.info('Closing database connection...')
-        cls._client.close()
+        pass
 
     @classmethod
     def print_debug_settings(cls):
@@ -156,9 +155,7 @@ class MetadataTable(Database):
 
     @classmethod
     def search_id_by_search_value(cls, manga_title):
-        cls._log.debug(f'Searching "series_id" using value "{manga_title}"')
-        cursor = cls._database.find_one({"search_value": manga_title}, {"_id": 1})
-        return cursor['_id']
+        pass
 
     @classmethod
     def search_series_title(cls, manga_title):
@@ -246,13 +243,7 @@ class ProcSeriesTable(Database):
 
     @classmethod
     def save_while_running(cls):
-        if cls._last_save_time is not None:
-            last_save_delta = (datetime.now() - cls._last_save_time).total_seconds()
-
-            # Save every hour
-            if last_save_delta > 3600:
-                cls._last_save_time = datetime.now()
-                cls.save()
+        pass
 
 
 class TaskQueueTable(Database):

@@ -143,15 +143,7 @@ class QueueWorker:
 
     @classmethod
     def run(cls):
-        for worker in cls._worker_list:
-            worker.start()
-
-        cls._observer.start()
-
-        cls._log.info(f'Watching "{cls.download_dir}" for new downloads')
-
-        while cls._running:
-            time.sleep(1)
+        pass
 
     @classmethod
     def dummy_process(cls):
@@ -159,51 +151,18 @@ class QueueWorker:
 
     @classmethod
     def process(cls):
-        while cls._running:
-            if not cls._queue.empty():
-                event = cls._queue.get()
-
-                if event.event_type in ('created', 'existing'):
-                    cls._log.info(f'Pulling "file {event.event_type}" event from the queue for "{event.src_path}"')
-                    path = Path(event.src_path)
-                elif event.event_type == 'moved':
-                    cls._log.info(f'Pulling "file {event.event_type}" event from the queue for "{event.dest_path}"')
-                    path = Path(event.dest_path)
-                else:
-                    cls._log.error('Event was passed, but Manga Tagger does not know how to handle it. Please open an '
-                                   'issue for further investigation.')
-                    cls._queue.task_done()
-                    return
-
-                current_size = -1
-                try:
-                    destination_size = path.stat().st_size
-                    while current_size != destination_size:
-                        current_size = destination_size
-                        time.sleep(1)
-                except FileNotFoundError as fnfe:
-                    cls._log.exception(fnfe)
-
-                try:
-                    MangaTaggerLib.process_manga_chapter(path, uuid.uuid1())
-                except Exception as e:
-                    cls._log.exception(e)
-                    cls._log.warning('Manga Tagger is unfamiliar with this error. Please log an issue for '
-                                     'investigation.')
-
-                cls._queue.task_done()
-            time.sleep(1)
+        pass
 
 class SeriesHandler(PatternMatchingEventHandler):
     _log = None
 
     @classmethod
     def class_name(cls):
-        return cls.__name__
+        pass
 
     @classmethod
     def fully_qualified_class_name(cls):
-        return f'{cls.__module__}.{cls.__name__}'
+        pass
 
     def __init__(self, queue):
         self._log = logging.getLogger(self.fully_qualified_class_name())
@@ -212,17 +171,7 @@ class SeriesHandler(PatternMatchingEventHandler):
         self._log.debug(f'{self.class_name()} class has been initialized')
 
     def on_created(self, event):
-        self._log.debug(f'Event Type: {event.event_type}')
-        self._log.debug(f'Event Path: {event.src_path}')
-
-        self.queue.put(QueueEvent(event, QueueEventOrigin.WATCHDOG))
-        self._log.info(f'Creation event for "{event.src_path}" will be added to the queue')
+        pass
 
     def on_moved(self, event):
-        self._log.debug(f'Event Type: {event.event_type}')
-        self._log.debug(f'Event Source Path: {event.src_path}')
-        self._log.debug(f'Event Destination Path: {event.dest_path}')
-
-        if Path(event.src_path) == Path(event.dest_path) and '-.-' in event.dest_path:
-            self.queue.put(QueueEvent(event, QueueEventOrigin.WATCHDOG))
-        self._log.info(f'Moved event for "{event.dest_path}" will be added to the queue')
+        pass
